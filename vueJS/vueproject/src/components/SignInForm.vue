@@ -18,7 +18,7 @@
 </template>
 <script>
 const axios = require("axios");
-
+import jwt_decode from "jwt-decode"
 export default {
   name: "SignInForm",
   data: () => ({
@@ -37,8 +37,11 @@ export default {
         .post("http://localhost:3000/ath/sign-in", dataOfUser)
         .then(function (response) {
           if(response.status === 200) {
-            console.log(typeof response.data );
+            //console.log(response.data );
             that.$store.dispatch('triggerMutation', response.data)
+            var decoded = jwt_decode(response.data);
+            //console.log('MYTOKEN',  decoded.id);
+            that.$store.dispatch('actionToUserData', decoded.id)
             that.$router.push('/dashboard');
           }
         })
@@ -49,6 +52,14 @@ export default {
           
         });
     },
+    /*  // get the decoded payload ignoring signature, no secretOrPrivateKey needed
+            var decoded = jwt.decode(token);
+
+            // get the decoded payload and header
+            var decoded = jwt.decode(token, { complete: true });
+            console.log("header", decoded.header);
+            console.log("payload", decoded.payload);*/
+
  //----------other way to call axios for log in----------
 
     //     async login() {

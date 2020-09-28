@@ -1,12 +1,11 @@
 <template>
-  
-  <div>
+<div>
+  <ConnectedHeader/>
      <div class="container">
-     <h1 class="display-4">This Dashboard Page</h1>
-     <p class="lead">You are Welcome</p>
+     <h3 class="display-4">You are Welcome in connected-user dashboard</h3>
      <hr class="my-4">
-      <b-button variant="danger" @click="signOut()">Log out</b-button>
      </div>
+  
   </div>
 
 
@@ -14,19 +13,18 @@
 </template>
 
 <script>
+import ConnectedHeader from './ConnectedHeader'
 export default { 
   name: 'Dashboard',
+  components:{
+    ConnectedHeader
+  },
    data() {
     return {
      
     };
   },
   methods:{
-    signOut(){
-      this.$store.dispatch('signOutAction');
-      this.$router.push('/home');
-      console.log('in dashboard')
-    }
   }
   
   }

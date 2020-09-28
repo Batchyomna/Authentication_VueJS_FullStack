@@ -154,7 +154,7 @@ router.post('/ath/sign-in',(req, res) => {
       if (user.length > 0) {
         bcrypt.compare(req.body.password, user[0].password).then(function (result) {
           if (result == true) {
-            const token = generateAccessToken({ email: req.body.email });
+            const token = generateAccessToken({ id: user[0].id, name: user[0].name });
             res.status(200).json(token);  //You are authrised
           } else {
             res.status(401).send("Sorry, It is not the same stored password")
@@ -170,11 +170,33 @@ router.post('/ath/sign-in',(req, res) => {
     res.status(500).send('Error on the server.')
   }
 });
-function generateAccessToken(useremail) {
+function generateAccessToken(id, name) {
  let x_TOKEN_SECRET = require('crypto').randomBytes(64).toString('hex')
 
-  // expires after half and hour (1800 seconds = 30 minutes)
-  return jwt.sign(useremail, x_TOKEN_SECRET, { expiresIn: '300s' });
+  // expires after half an hour (1800 seconds = 30 minutes)
+  return jwt.sign({
+    id: id,
+    name: name,
+  }, x_TOKEN_SECRET, { expiresIn: '1800s' });
 }
 
+router.post('/add-new-contact', (req, res) => {
+  try {
+    let userName = req.body.name
+    let userEmail = req.body.email
+    let userID = req.body.id_user_affiliate
+
+    console.log('id ', userID);
+    console.log('name ', userName);
+    console.log('email ', userEmail);
+    
+    
+      var sql = `INSERT INTO contacts (name, email, password) VALUES ('${req.body[keys[0]]}', '${req.body[keys[1]]}','${hashPW}')`;
+      connection.query(sql)
+      res.send('It is OK')
+    // })
+  } catch (err) {
+    console.log(err);
+  }
+});
 module.exports = router;

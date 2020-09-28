@@ -8,7 +8,9 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
    
     state: {
-        token:''
+        token:'',
+        userName: '',
+        idUser:null
       
     },
     mutations: {
@@ -17,9 +19,14 @@ const store = new Vuex.Store({
         },
         signOutMutation(state){
             state.token = ''
-            console.log('in mutation');
-            console.log('last token',state.token);
+            // console.log('in mutation');
+            // console.log('last token',state.token);
             
+        },
+        saveUserData(state,objectUserData){
+            state.userName = objectUserData.name
+            state.idUser = objectUserData.id
+
         }
     },
 
@@ -29,7 +36,12 @@ const store = new Vuex.Store({
         },
         signOutAction(context){
             context.commit('signOutMutation')
-            console.log('in action');
+           
+        },
+        actionToUserData(context, objectUserData){
+            //console.log('in action',objectUserData);
+            context.commit('saveUserData', objectUserData)
+  
         }
     }, 
     getters:{
@@ -39,6 +51,10 @@ const store = new Vuex.Store({
             }else{
                 return false
             }
+        },
+        readUserData: (state)=>()=>{
+            //console.log('id', state.idUser);
+            return state.userName
         }
     },
     plugins: [
