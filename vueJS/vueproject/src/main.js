@@ -8,6 +8,9 @@ import VueRouter from 'vue-router'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import Vuelidate from 'vuelidate'
+
+Vue.use(Vuelidate)
 Vue.use(Vuex)
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
