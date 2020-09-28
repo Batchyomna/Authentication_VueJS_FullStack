@@ -179,22 +179,16 @@ function generateAccessToken(id, name) {
     name: name,
   }, x_TOKEN_SECRET, { expiresIn: '1800s' });
 }
-
+//------------------add new contacts for specified user
 router.post('/add-new-contact', (req, res) => {
   try {
     let userName = req.body.name
     let userEmail = req.body.email
     let userID = req.body.id_user_affiliate
-
-    console.log('id ', userID);
-    console.log('name ', userName);
-    console.log('email ', userEmail);
-    
-    
-      var sql = `INSERT INTO contacts (name, email, password) VALUES ('${req.body[keys[0]]}', '${req.body[keys[1]]}','${hashPW}')`;
+      var sql = `INSERT INTO contacts (name, email,user_affiliate) VALUES ('${userName}','${userEmail}', '${userID}')`;
+      //console.log(sql);
       connection.query(sql)
-      res.send('It is OK')
-    // })
+      res.status(200).send(userID)
   } catch (err) {
     console.log(err);
   }
