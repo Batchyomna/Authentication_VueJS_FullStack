@@ -40,8 +40,18 @@ export default {
             //console.log(response.data );
             that.$store.dispatch('triggerMutation', response.data)
             var decoded = jwt_decode(response.data);
-            //console.log('MYTOKEN',  decoded.id);
+            //(decoded.id)in the property id, there are the id & name of the user that we used to hash PWD
             that.$store.dispatch('actionToUserData', decoded.id)
+            console.log(decoded.id.id);
+            //console.log(`http://localhost:3000/get-contacts/${decoded.id.id}`);
+            axios.get(`http://localhost:3000/get-contacts/${decoded.id.id}`)
+            .then(function (contacts) { 
+              that.$store.dispatch('actionToSaveContacts',contacts.data);
+               console.log('dispatch contacts from signIN components:'); 
+               var parsedobj = JSON.parse(JSON.stringify(contacts.data))
+                  console.log(parsedobj)
+               })
+               .catch(function (error) {console.log(error)})
             that.$router.push('/dashboard');
           }
         })

@@ -2,7 +2,7 @@
   <b-navbar type="dark" variant="dark" nav-justified>
     <b-navbar-nav >
       <b-nav-item >Dashboard</b-nav-item>
-      <b-nav-item >{{$store.getters.readUserData()}}</b-nav-item>
+      <b-nav-item >{{$store.getters.readUserName()}}</b-nav-item>
       <b-nav-item ><b-button variant="danger" @click="signOut()">Log out</b-button></b-nav-item>
     </b-navbar-nav>
   </b-navbar>

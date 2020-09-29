@@ -10,7 +10,8 @@ const store = new Vuex.Store({
     state: {
         token:'',
         userName: '',
-        idUser:null
+        idUser:null,
+        userContacts: []
       
     },
     mutations: {
@@ -19,6 +20,7 @@ const store = new Vuex.Store({
         },
         signOutMutation(state){
             state.token = ''
+            state.userContacts =[]
             // console.log('in mutation');
             // console.log('last token',state.token);
             
@@ -27,7 +29,21 @@ const store = new Vuex.Store({
             state.userName = objectUserData.name
             state.idUser = objectUserData.id
 
+        },
+        saveContacts(state, contacts){
+            state.userContacts.push(contacts)
+            // for(let i=0; i<contacts.length; i++){
+            //     state.userContacts[i] = contacts[i]
+            // }
+            // console.log('in mutation contact');
+            // console.log(contacts[0])
+            // console.log(contacts[0].name);
+            // console.log(contacts.length);
+            // console.log(typeof contacts);
+            // console.log(state.userContacts);
+            // console.log(state.userContacts[0].name);
         }
+
     },
 
     actions:{
@@ -42,6 +58,11 @@ const store = new Vuex.Store({
             //console.log('in action',objectUserData);
             context.commit('saveUserData', objectUserData)
   
+        },
+        actionToSaveContacts(context, contacts){
+            context.commit('saveContacts', contacts )
+            //console.log('in action contact');
+            //console.log(contacts);
         }
     }, 
     getters:{
@@ -52,9 +73,17 @@ const store = new Vuex.Store({
                 return false
             }
         },
-        readUserData: (state)=>()=>{
-            //console.log('id', state.idUser);
+        readUserName: (state)=>()=>{
             return state.userName
+        },
+        readUserID: (state)=>()=>{
+            //console.log('id', state.idUser);
+            return state.idUser
+        },
+        readUserContacts: (state)=>()=>{
+            console.log('read state in getters', state.userContacts);
+
+            return state.userContacts
         }
     },
     plugins: [

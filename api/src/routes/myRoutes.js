@@ -188,8 +188,21 @@ router.post('/add-new-contact', (req, res) => {
       var sql = `INSERT INTO contacts (name, email,user_affiliate) VALUES ('${userName}','${userEmail}', '${userID}')`;
       //console.log(sql);
       connection.query(sql)
-      res.status(200).send(userID)
+      res.status(200).send()
   } catch (err) {
+    console.log(err);
+  }
+});
+//------------------GET all the contacts for specified user
+router.get('/get-contacts/:id',async (req, res) => {
+  try {
+    let userID = req.params.id
+    //------we put the name of 1st table then the name 2nd table with the condition with keywords (ON....and)
+      var sql = `SELECT contacts.name, contacts.email, contacts.Id FROM users INNER JOIN contacts ON users.id = contacts.user_affiliate and contacts.user_affiliate = ${userID}`;
+      var result = await connection.promise().query(sql)// promise to eviter the error of async method to not use function callback
+       //console.log(result[0]);
+      res.json(result[0]); // it return array with 2 array in it.
+    } catch (err) {
     console.log(err);
   }
 });
