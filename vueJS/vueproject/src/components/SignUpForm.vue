@@ -86,12 +86,12 @@ export default {
   },
   methods: {
     validEmail: function (email) {
-      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
+      var rg = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return rg.test(email);
     },
     addUser() {
-      this.$v.$touch();
-      if (!this.$v.$invalid) {
+      this.$v.$touch();//calling $touch() method, we’re triggering Vuelidate to check the validation status of all the field.
+      if (!this.$v.$invalid) {// if ther is not an error...continue
         let myDataOfUser = {
           name: this.name,
           email: this.email,
@@ -107,9 +107,14 @@ export default {
               that.name = "";
               that.email = "";
               that.password = "";
-            } else {
+            } else if (response.status == 400) {
               console.log("ELSE");
-              that.message = "There was a problem during the registration";
+              that.message = 'This NAME is already exists. You have to choose another NAME';
+              that.name = "";
+              that.email = "";
+              that.password = "";
+            }else{
+              that.message = 'Sorry,there were some problemes in your registration; You have to do it again';
               that.name = "";
               that.email = "";
               that.password = "";

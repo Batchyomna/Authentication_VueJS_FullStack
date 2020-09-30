@@ -38,8 +38,9 @@ export default {
             axios
                 .post("http://localhost:3000/add-new-contact", dataOfContact)
                 .then(function (response) {
+
                 if(response.status === 200) {
-                  //that.$store.dipatch('actionToAddNewContact', )
+                 //that.$store.dipatch('actionToAddNewContact', )
                  that.name = ""
                  that.email = ""
                  that.message = " Your contact has been successfully registered"
