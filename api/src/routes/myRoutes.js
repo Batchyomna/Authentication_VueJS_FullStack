@@ -107,10 +107,9 @@ router.delete('/db/:dbName', (req, res) => {
 router.post('/sign-up', (req, res, next) => {
   connection.query("SELECT name FROM users", function (err, result, fields) {
     if (err) throw err;
-    
     let theName = result.find(element => element.name === req.body.name)
     if (theName) {
-      res.status(400).send('This NAME is already exists. You have to choose another NAME')//status(400)= Bad Request
+      res.status(202).send('This NAME is already exists. You have to choose another NAME')//status(202)= to solve this problem in the part .then of axios
     } else {
       next()
     }
@@ -120,7 +119,7 @@ router.post('/sign-up', (req, res, next) => {
       bcrypt.hash(req.body.password, saltRounds).then(function (hashPW) {
         var sql = `INSERT INTO users (name, email, password) VALUES ('${req.body.name}', '${req.body.email}','${hashPW}')`;
         connection.query(sql)
-        res.status(200).send('It is OK')
+        res.status(201).send('It is OK')
       })
     } catch (err) {
       console.log(err);
@@ -207,6 +206,7 @@ router.post('/sign-up', (req, res, next) => {
   //------------------GET all the contacts for specified user
   router.get('/get-contacts/:id', async (req, res) => {
     try {
+      console.log(req.headers.authorization);
       let userID = req.params.id
       //------we put the name of 1st table then the name 2nd table with the condition with keywords (ON....and)
       var sql = `SELECT contacts.name, contacts.email FROM users INNER JOIN contacts ON users.id = contacts.user_affiliate and contacts.user_affiliate = ${userID}`;
@@ -217,4 +217,14 @@ router.post('/sign-up', (req, res, next) => {
       console.log(err);
     }
   });
+
+  // function ensureAuthenticated(req, res, next) {
+  //   if (req.isAuthenticated()){
+  //     console.log(req.isAuthenticated());
+  //     return next();
+  //   }
+      
+  //   else
+  //     {res.redirect('/home')} 
+  // }
   module.exports = router;

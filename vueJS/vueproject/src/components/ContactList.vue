@@ -1,7 +1,7 @@
 
 <template>
   <div>
-      <div v-for="item in items[0]" :key="item.email" class="newContact">
+      <div v-for="item in items" :key="item.email" class="newContact">
             <p>Name: {{item.name}}</p>
             <p>Email: {{item.email}}</p>
       </div>

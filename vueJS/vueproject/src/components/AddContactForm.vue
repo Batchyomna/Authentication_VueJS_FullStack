@@ -34,13 +34,14 @@ export default {
                 email:this.email,
                 id_user_affiliate: this.$store.getters.readUserID()
             };
+            let newContact = {email: this.email, name: this.name}
             let that = this
             axios
                 .post("http://localhost:3000/add-new-contact", dataOfContact)
                 .then(function (response) {
-
+                
                 if(response.status === 200) {
-                 //that.$store.dipatch('actionToAddNewContact', )
+                 that.$store.dispatch("actionToSaveContacts", newContact )
                  that.name = ""
                  that.email = ""
                  that.message = " Your contact has been successfully registered"

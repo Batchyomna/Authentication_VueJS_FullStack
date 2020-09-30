@@ -101,30 +101,28 @@ export default {
         axios
           .post("http://localhost:3000/sign-up", myDataOfUser)
           .then(function (response) {
-            if (response.status == 200) {
+            
+            if (response.status === 201) {
               console.log("API is called");
               that.message = "You have been registred GO sign in NOW!";
               that.name = "";
               that.email = "";
               that.password = "";
-            } else if (response.status == 400) {
-              console.log("ELSE");
+            } else if(response.status === 202){
               that.message = 'This NAME is already exists. You have to choose another NAME';
               that.name = "";
               that.email = "";
               that.password = "";
-            }else{
-              that.message = 'Sorry,there were some problemes in your registration; You have to do it again';
-              that.name = "";
-              that.email = "";
-              that.password = "";
+
             }
           })
           .catch(function (error) {
-            console.log(error);
-          });
+              console.log(error); 
+          })
+            
+           
       }else{
-        this.message = "You have to verify your data";
+        this.message = "You have to fill all the fields correclty ";
 
       }
     },

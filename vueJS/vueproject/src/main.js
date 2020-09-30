@@ -31,7 +31,7 @@ const router = new VueRouter({
       path: '/dashboard', component: Dashboard, beforeEnter(to, from, next) {
         // check vuex store 
         if (store.getters.callTheToken()) {
-          next({})
+          next()
         } else {
           next({ path: '/home' });
         }
