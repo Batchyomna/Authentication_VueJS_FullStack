@@ -56,19 +56,19 @@ export default {
         .post("http://localhost:3000/ath/sign-in", dataOfUser)
         .then(function (response) {
           if (response.status === 200) {
-            that.$store.dispatch("triggerMutation", response.data);//send Token
-            var decoded = jwt_decode(response.data);//decode Token
-            //(decoded.id)in the property id, there are the id & name of the user that we used to hash PWD
-            that.$store.dispatch("actionToUserData", decoded.id);
-            //console.log(decoded.id.id);
-            let myHeader ={headers: {'Authorization': `${response.data}`} };
+
+            that.$store.dispatch("triggerMutation", response.data);//------send Token
+            let myHeader ={headers: {'Authorization': `${response.data}`} };//------put token in the header
+
+            var decoded = jwt_decode(response.data);//---------------decode Token
+            that.$store.dispatch("actionToUserData", decoded); //-----(decoded)is an object where there are the id & name of the user that we used to hash PWD
+            
+            //let myHeader ={headers: {'Authorization': `${that.$store.getters.callTokenValue()}`} };
+            
             axios
-              .get(`http://localhost:3000/get-contacts/${decoded.id.id}`, myHeader)
+              .get(`http://localhost:3000/get-contacts/${decoded.id}`, myHeader)
               .then(function (contacts) {
                 that.$store.dispatch("actionToSaveContacts", contacts.data);
-                // console.log("dispatch contacts from signIN components:");
-                // var parsedobj = JSON.parse(JSON.stringify(contacts.data));
-                // console.log(parsedobj);
               })
               .catch(function (error) {
                 console.log(error);
@@ -82,13 +82,6 @@ export default {
           that.$router.push("/home");
         });
     },
-    /*  // get the decoded payload ignoring signature, no secretOrPrivateKey needed
-            var decoded = jwt.decode(token);
-
-            // get the decoded payload and header
-            var decoded = jwt.decode(token, { complete: true });
-            console.log("header", decoded.header);
-            console.log("payload", decoded.payload);*/
 
     //----------other way to call axios for log in----------
 

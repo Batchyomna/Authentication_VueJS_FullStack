@@ -32,18 +32,7 @@ export default {
     AddContactForm,
     ContactList
   },
-   data() {
-    return {
-     
-    };
-  },
-  methods:{
-  }
   
-  }
+}
 
 </script>
-
-<style scoped>
-
-</style>

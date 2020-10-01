@@ -13,10 +13,8 @@ export default {
     name:"ContactList",
     computed:{
         items(){
-           console.log('i am  in the computed in the ContactList');
-            let x = this.$store.getters.readUserContacts()
-            //console.log('x', x[0][1].name);
-         return x
+           //console.log('i am  in the computed in the ContactList');
+         return this.$store.getters.readUserContacts()
         }
     } 
 

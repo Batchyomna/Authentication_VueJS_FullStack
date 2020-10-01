@@ -20,7 +20,7 @@ export default {
     signOut(){
       this.$store.dispatch('signOutAction');
       this.$router.push('/home');
-      console.log('in dashboard')
+      //console.log('sign out of dashboard')
     }
   }
     

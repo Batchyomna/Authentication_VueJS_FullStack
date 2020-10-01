@@ -35,9 +35,12 @@ export default {
                 id_user_affiliate: this.$store.getters.readUserID()
             };
             let newContact = {email: this.email, name: this.name}
+            const myHeaders = {'Authorization': `${this.$store.getters.callTokenValue()}`} ;
             let that = this
             axios
-                .post("http://localhost:3000/add-new-contact", dataOfContact)
+                .post("http://localhost:3000/add-new-contact", dataOfContact,{
+                  headers: myHeaders
+                })
                 .then(function (response) {
                 
                 if(response.status === 200) {

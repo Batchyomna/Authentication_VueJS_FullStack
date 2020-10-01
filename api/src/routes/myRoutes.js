@@ -1,7 +1,12 @@
 const mysql = require('mysql2');
 const express = require('express')
-const connection = require('../database/myDataBase')
 const router = express.Router();
+
+
+const connection = require('../database/myDataBase')
+const myAuth  = require('../middleware/authentication')
+const authSingUp = require('../middleware/authSignUp')
+
 const jwt = require("jsonwebtoken");
 
 
@@ -104,17 +109,7 @@ router.delete('/db/:dbName', (req, res) => {
   })
 });
 //-----------------------------------------Sign up--------------
-router.post('/sign-up', (req, res, next) => {
-  connection.query("SELECT name FROM users", function (err, result, fields) {
-    if (err) throw err;
-    let theName = result.find(element => element.name === req.body.name)
-    if (theName) {
-      res.status(202).send('This NAME is already exists. You have to choose another NAME')//status(202)= to solve this problem in the part .then of axios
-    } else {
-      next()
-    }
-  })
-},function (req, res, next) {
+router.post('/sign-up', authSingUp, function (req, res, next) {
     try {
       bcrypt.hash(req.body.password, saltRounds).then(function (hashPW) {
         var sql = `INSERT INTO users (name, email, password) VALUES ('${req.body.name}', '${req.body.email}','${hashPW}')`;
@@ -164,7 +159,7 @@ router.post('/sign-up', (req, res, next) => {
         if (user.length > 0) {
           bcrypt.compare(req.body.password, user[0].password).then(function (result) {
             if (result == true) {
-              const token = generateAccessToken({ id: user[0].id, name: user[0].name });
+              const token = generateAccessToken( user[0].id, user[0].name);
               res.status(200).json(token);  //You are authrised
             } else {
               res.status(401).send("Sorry, It is not the same stored password")
@@ -181,16 +176,16 @@ router.post('/sign-up', (req, res, next) => {
     }
   });
   function generateAccessToken(id, name) {
-    let x_TOKEN_SECRET = require('crypto').randomBytes(64).toString('hex')
+    //let x_TOKEN_SECRET = require('crypto').randomBytes(64).toString('hex')
 
     //expires after half an hour (1800 seconds = 30 minutes)
     return jwt.sign({
       id: id,
       name: name,
-    }, x_TOKEN_SECRET, { expiresIn: '1800s' });
+    }, 'x_TOKEN_SECRET', { expiresIn: '1800s' });
   }
   //------------------add new contacts for specified user
-  router.post('/add-new-contact', (req, res) => {
+  router.post('/add-new-contact',myAuth , (req, res) => {
     try {
       let userName = req.body.name
       let userEmail = req.body.email
@@ -204,27 +199,17 @@ router.post('/sign-up', (req, res, next) => {
     }
   });
   //------------------GET all the contacts for specified user
-  router.get('/get-contacts/:id', async (req, res) => {
+  router.get('/get-contacts/:id',myAuth, async (req, res) => {
     try {
-      console.log(req.headers.authorization);
       let userID = req.params.id
       //------we put the name of 1st table then the name 2nd table with the condition with keywords (ON....and)
       var sql = `SELECT contacts.name, contacts.email FROM users INNER JOIN contacts ON users.id = contacts.user_affiliate and contacts.user_affiliate = ${userID}`;
       var result = await connection.promise().query(sql)// promise to eviter the error of async method to not use function callback
-      //console.log(result[0]);
       res.json(result[0]); // it return array with 2 array in it.
     } catch (err) {
       console.log(err);
     }
   });
 
-  // function ensureAuthenticated(req, res, next) {
-  //   if (req.isAuthenticated()){
-  //     console.log(req.isAuthenticated());
-  //     return next();
-  //   }
-      
-  //   else
-  //     {res.redirect('/home')} 
-  // }
+ 
   module.exports = router;

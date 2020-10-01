@@ -1,0 +1,169 @@
+<template>
+  <div>
+    <b-card bg-variant="light">
+      <b-form-group label-cols-lg="3" label="Shipping Address">
+        <b-form-group>
+          <b-form-input
+            id="nested-street"
+            v-model="street"
+            placeholder="Street Name"
+            @input="$v.street.$touch()"
+            :class="{ borderError: $v.street.$error == true }"
+          ></b-form-input>
+          <div v-if="$v.street.$dirty">
+            <p class="error" v-if="!$v.street.required">Street name must not be empty.</p>
+          </div>
+        </b-form-group>
+
+        <b-form-group>
+          <b-form-input
+            id="nested-street"
+            v-model="city"
+            placeholder="city Name"
+            @input="$v.city.$touch()"
+            :class="{ borderError: $v.city.$error == true }"
+          ></b-form-input>
+          <div v-if="$v.city.$dirty">
+            <p class="error" v-if="!$v.city.required">city name must not be empty.</p>
+            <p
+              class="error"
+              v-if="!$v.city.minLength"
+            >You should have at least {{ $v.city.$params.minLength.min}} characters.</p>
+            <p
+              class="error"
+              v-if="!$v.city.maxLength"
+            >You should have amaximum of {{ $v.city.$params.maxLength.max}} characters.</p>
+          </div>
+        </b-form-group>
+
+        <b-form-group>
+          <b-form-input
+            id="nested-street"
+            v-model="email"
+            placeholder="Your email"
+            @input="$v.email.$touch()"
+            :class="{ borderError: $v.email.$error == true }"
+          ></b-form-input>
+          <div v-if="$v.email.$dirty">
+            <p class="error" v-if="!$v.email.required">email name must not be empty.</p>
+            <p
+              class="error"
+              v-if="!$v.email.minLength"
+            >You should have at least {{ $v.email.$params.minLength.min}} characters.</p>
+            <p class="error" v-if="!$v.email.email">You should enter a valid email adress.</p>
+          </div>
+        </b-form-group>
+
+        <b-form-group>
+          <b-form-input
+            id="nested-street"
+            v-model="password"
+            placeholder="Your password"
+            @input="$v.password.$touch()"
+            type="password"
+            :class="{ borderError: $v.password.$error == true }"
+          ></b-form-input>
+          <div v-if="$v.password.$dirty">
+            <p class="error" v-if="!$v.password.required">password name must not be empty.</p>
+            <p
+              class="error"
+              v-if="!$v.password.minLength"
+            >You should have at least {{ $v.password.$params.minLength.min}} characters.</p>
+          </div>
+        </b-form-group>
+
+        <b-form-group>
+          <b-form-input
+            id="nested-street"
+            v-model="passwordcheck"
+            placeholder="Your passwordcheck"
+            @input="$v.passwordcheck.$touch()"
+            type="password"
+            :class="{ borderError: $v.passwordcheck.$error == true, borderSuccess: $v.passwordcheck.$dirty && !$v.passwordcheck.$error }"
+          ></b-form-input>
+          <div v-if="$v.passwordcheck.$dirty">
+            <p class="error" v-if="!$v.passwordcheck.required">passwordcheck name must not be empty.</p>
+            <p
+              class="error"
+              v-if="!$v.passwordcheck.sameAsPassword"
+            >You should have the same password.</p>
+          </div>
+        </b-form-group>
+      </b-form-group>
+    </b-card>
+    <button class="btn btn-success" @click="resetDatas">RESET</button>
+    <pre>{{ $v }}</pre>
+  </div>
+</template>
+
+<script>
+import {
+  required,
+  minLength,
+  maxLength,
+  email,
+  sameAs,
+} from "vuelidate/lib/validators";
+
+export default {
+  name: "LiveForm",
+  data() {
+    return {
+      street: "",
+      city: "",
+      email: "",
+      password: "",
+      passwordcheck: "",
+    };
+  },
+  validations: {
+    street: {
+      required,
+    },
+    city: {
+      required,
+      minLength: minLength(3),
+      maxLength: maxLength(5),
+    },
+    email: {
+      required,
+      email,
+      minLength: minLength(10),
+    },
+    password: {
+      required,
+      minLength: minLength(3),
+    },
+    passwordcheck: {
+      required,
+      minLength: minLength(3),
+      sameAsPassword: sameAs("password"),
+    },
+  },
+  methods: {
+    resetDatas() {
+      console.log("ici");
+      this.city = "";
+      this.street = "";
+      this.email = "";
+      this.password = "";
+      this.passwordcheck = "";
+      this.$v.$reset();
+    },
+  },
+};
+</script>
+
+<style scoped>
+.error {
+  color: red;
+}
+
+.borderError {
+  border-color: red !important;
+}
+
+.borderSuccess {
+  border-color: green !important;
+}
+</style>

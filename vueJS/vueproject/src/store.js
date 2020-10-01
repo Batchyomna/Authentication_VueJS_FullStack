@@ -56,23 +56,25 @@ const store = new Vuex.Store({
         }
     },
     getters: {
-        callTheToken: (state) => () => {
+        callTheToken: (state) => () => {// for the method beforeEnter on the routes vue
             if (state.token.length > 0) {
                 return true;
             } else {
                 return false
             }
         },
+        callTokenValue: (state) => () => {// for the authentication on the routes API
+            if (state.token.length > 0) {
+                return state.token;
+            }
+        },
         readUserName: (state) => () => {
             return state.userName
         },
         readUserID: (state) => () => {
-            //console.log('id', state.idUser);
             return state.idUser
         },
         readUserContacts: (state) => () => {
-            console.log('read state in getters', state.userContacts);
-
             return state.userContacts
         }
     },
