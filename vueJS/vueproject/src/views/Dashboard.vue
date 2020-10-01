@@ -1,12 +1,20 @@
 <template>
-  
-  <div>
+<div>
+  <ConnectedHeader/>
      <div class="container">
-     <h1 class="display-4">This Dashboard Page</h1>
-     <p class="lead">You are Welcome</p>
-     <hr class="my-4">
-      <b-button variant="danger" @click="signOut()">Log out</b-button>
+     <h3 class="display-4">You are Welcome in connected-user dashboard</h3>
+     <b-card no-body>
+    <b-tabs card>
+      <b-tab title="List-Contact" active>
+        <b-card-text><ContactList/></b-card-text>
+      </b-tab>
+      <b-tab title="Add-Contact">
+        <b-card-text><AddContactForm/></b-card-text>
+      </b-tab>
+    </b-tabs>
+  </b-card>
      </div>
+  
   </div>
 
 
@@ -14,25 +22,17 @@
 </template>
 
 <script>
+import ConnectedHeader from './ConnectedHeader'
+import ContactList from '../components/ContactList'
+import AddContactForm from '../components/AddContactForm'
 export default { 
   name: 'Dashboard',
-   data() {
-    return {
-     
-    };
+  components:{
+    ConnectedHeader,
+    AddContactForm,
+    ContactList
   },
-  methods:{
-    signOut(){
-      this.$store.dispatch('signOutAction');
-      this.$router.push('/home');
-      console.log('in dashboard')
-    }
-  }
   
-  }
+}
 
 </script>
-
-<style scoped>
-
-</style>

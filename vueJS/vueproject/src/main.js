@@ -8,6 +8,9 @@ import VueRouter from 'vue-router'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import Vuelidate from 'vuelidate'
+
+Vue.use(Vuelidate)
 Vue.use(Vuex)
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
@@ -28,7 +31,7 @@ const router = new VueRouter({
       path: '/dashboard', component: Dashboard, beforeEnter(to, from, next) {
         // check vuex store 
         if (store.getters.callTheToken()) {
-          next({})
+          next()
         } else {
           next({ path: '/home' });
         }
